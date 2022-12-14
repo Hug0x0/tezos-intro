@@ -1,0 +1,109 @@
+{ parameter (or (or (address %nukeText) (unit %reset)) (string %setText)) ;
+  storage
+    (pair (pair (address %admin) (list %user_blacklist address))
+          (map %user_map
+             address
+             (pair string
+                   (or (or (or (unit %bronze) (unit %gold)) (or (unit %moldu) (unit %platinum)))
+                       (unit %silver))))) ;
+  code { UNPAIR ;
+         DUP 2 ;
+         SENDER ;
+         SWAP ;
+         CAR ;
+         CDR ;
+         ITER { DUP 2 ;
+                SWAP ;
+                COMPARE ;
+                EQ ;
+                IF { PUSH string "You are blacklisted" ; FAILWITH } {} } ;
+         DROP ;
+         IF_LEFT
+           { IF_LEFT
+               { DUP 2 ;
+                 CAR ;
+                 CAR ;
+                 SENDER ;
+                 COMPARE ;
+                 NEQ ;
+                 IF { PUSH string "You are not an admin" ; FAILWITH } {} ;
+                 DUP 2 ;
+                 CDR ;
+                 DUP 2 ;
+                 GET ;
+                 IF_NONE
+                   { DROP 2 ; PUSH string "Sorry, this text no exists" ; FAILWITH }
+                   { DROP ;
+                     DUP 2 ;
+                     CDR ;
+                     DUP 2 ;
+                     NONE (pair string (or (or (or unit unit) (or unit unit)) unit)) ;
+                     SWAP ;
+                     UPDATE ;
+                     DUP 3 ;
+                     CAR ;
+                     PAIR ;
+                     DUP ;
+                     CDR ;
+                     DIG 3 ;
+                     CAR ;
+                     CDR ;
+                     DIG 3 ;
+                     CONS ;
+                     DIG 2 ;
+                     CAR ;
+                     CAR ;
+                     PAIR ;
+                     PAIR } }
+               { DROP ;
+                 EMPTY_MAP address (pair string (or (or (or unit unit) (or unit unit)) unit)) ;
+                 SWAP ;
+                 CAR ;
+                 PAIR } }
+           { DUP 2 ;
+             CDR ;
+             SENDER ;
+             GET ;
+             IF_NONE
+               { DUP 2 ;
+                 CDR ;
+                 UNIT ;
+                 LEFT unit ;
+                 RIGHT (or unit unit) ;
+                 LEFT unit ;
+                 DIG 2 ;
+                 PAIR ;
+                 SENDER ;
+                 SWAP ;
+                 SOME ;
+                 SWAP ;
+                 UPDATE }
+               { DROP ;
+                 DUP 2 ;
+                 CDR ;
+                 UNIT ;
+                 LEFT unit ;
+                 RIGHT (or unit unit) ;
+                 LEFT unit ;
+                 DIG 2 ;
+                 PAIR ;
+                 SOME ;
+                 SENDER ;
+                 UPDATE } ;
+             SWAP ;
+             CAR ;
+             PAIR } ;
+         NIL operation ;
+         PAIR } ;
+  view "getUserText"
+       address
+       (pair string
+             (or (or (or (unit %bronze) (unit %gold)) (or (unit %moldu) (unit %platinum)))
+                 (unit %silver)))
+       { UNPAIR ;
+         SWAP ;
+         CDR ;
+         SWAP ;
+         GET ;
+         IF_NONE { PUSH string "Sorry, this user no exists" ; FAILWITH } {} } }
+
