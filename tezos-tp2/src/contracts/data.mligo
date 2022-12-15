@@ -12,8 +12,8 @@ let set_data (data : storage ) : storage =
     let result : string = newName in
     result
 
-// Vue to see last data saved
-let get_data (store : storage) : storage = 
+[@view]
+let get_last_data (store : storage) : storage = 
     let result : string = store.last_name in
     result
 

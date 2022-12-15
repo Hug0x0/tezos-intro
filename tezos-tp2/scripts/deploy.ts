@@ -1,9 +1,7 @@
-import { buf2hex } from "@taquito/utils";
 import { InMemorySigner } from "@taquito/signer";
-import { MichelsonMap, TezosToolkit } from "@taquito/taquito";
+import { TezosToolkit } from "@taquito/taquito";
 import dotenv from "dotenv";
 import path from "path";
-import axios from "axios";
 
 
 // Read environment variables from .env file

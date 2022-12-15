@@ -25,6 +25,12 @@ let add_admin (admin, store : address * storage) : storage =
 
 let map : storage = { last_index = 3n; user_map = Map.empty }
 
+// User can write in the contract
+let user_write (user, store : address * storage) : storage =
+    let returned_user_map : mapping = Map.add store.last_index user store.user_map in
+    let new_index : index = (store.last_index + 1n) in
+    { store with last_index = new_index; user_map = returned_user_map }
+
 // Check if user is admin
 [@view]
 let is_admin (user, store : address * storage) : bool =
