@@ -12,6 +12,11 @@ let set_data (data : storage ) : storage =
     let result : string = newName in
     result
 
+// Vue to see last data saved
+let get_data (store : storage) : storage = 
+    let result : string = store.last_name in
+    result
+
 let main (action, store : parameter * storage) : return =
  let new_store : storage = match action with
         AddAdmin (p) -> add_admin (p, store)
